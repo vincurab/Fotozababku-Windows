@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fotozababku – úprava fotografií</title>
+<style>
+:root{color-scheme:light;--blue:#075985;--green:#047857;--red:#b91c1c;--line:#dbe3ea}
+*{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#172033;font-family:Arial,sans-serif}header{background:#10253f;color:#fff;padding:14px 20px}.head{max-width:1400px;margin:auto;display:flex;align-items:center;gap:14px}.head h1{font-size:24px;margin:0}.back{border:0;border-radius:10px;padding:10px 16px;background:#fff;color:#111827;font-weight:800;cursor:pointer}.wrap{max-width:1400px;margin:auto;padding:16px}.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}.controls{display:grid;grid-template-columns:2fr repeat(3,minmax(150px,1fr));gap:12px;align-items:end}label{font-weight:700;font-size:14px}input,select,button{font:inherit}input[type=file],select{display:block;width:100%;margin-top:6px;padding:11px;border:1px solid #aebdca;border-radius:10px;background:#fff}button{border:0;border-radius:10px;padding:11px 16px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer}button.green{background:var(--green)}button.red{background:var(--red)}button:disabled{opacity:.45;cursor:default}.destination{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding:12px;border:2px solid #86efac;border-radius:12px;background:#f0fdf4}.destination strong{font-size:17px}.destination span{color:#166534;font-weight:700}.status{margin-top:12px;padding:10px 12px;border-radius:10px;background:#edf7ff;font-weight:700}.workspace{display:grid;grid-template-columns:minmax(230px,310px) 1fr;gap:14px}.files{max-height:760px;overflow:auto}.file{display:grid;grid-template-columns:64px 1fr;gap:10px;width:100%;margin-bottom:8px;padding:8px;text-align:left;color:#172033;background:#f8fafc;border:2px solid transparent}.file.active{border-color:#0284c7;background:#e0f2fe}.file.ok{box-shadow:inset 5px 0 #16a34a}.file.error{box-shadow:inset 5px 0 #dc2626}.thumb{width:64px;height:48px;object-fit:cover;border-radius:6px;background:#dbe3ea}.filename{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800}.small{font-size:12px;color:#64748b;margin-top:4px}.stage{min-width:0}.canvas-wrap{position:relative;background:#16202a;border-radius:12px;overflow:hidden;min-height:420px;display:flex;align-items:center;justify-content:center}canvas{display:block;max-width:100%;touch-action:none;cursor:grab}canvas.dragging{cursor:grabbing}.help{margin:10px 0;color:#475569}.adjust{display:grid;grid-template-columns:1fr 1fr;gap:12px}.adjust label{background:#f8fafc;border-radius:10px;padding:10px}.adjust input{width:100%;margin-top:7px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1;min-width:180px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#dbeafe;color:#1e3a8a;font-size:12px;font-weight:800}.empty{text-align:center;padding:80px 20px;color:#64748b}.note{font-size:13px;color:#64748b;line-height:1.45}.warn{color:#9a3412;font-weight:700}@media(max-width:850px){.controls,.workspace,.adjust{grid-template-columns:1fr}.files{max-height:260px}.canvas-wrap{min-height:300px}}
+</style>
+</head>
+<body>
+<header><div class="head"><button class="back" id="backBtn">ZAVŘÍT</button><h1>Fotozababku – automatický ořez fotografií A4</h1><span style="margin-left:auto;font-weight:800">Windows aplikace bez BAT</span></div></header>
+<main class="wrap">
+  <section class="panel">
+    <div class="controls">
+      <label>1. ODKUD NAČÍST FOTOGRAFIE <span style="display:block;margin-top:5px;color:#475569;font-weight:600">Vyberte složku se zdrojovými fotografiemi.</span><input id="files" type="file" accept="image/jpeg,image/png,image/webp" webkitdirectory directory multiple></label>
+      <label>Orientace A4<select id="orientation"><option value="auto">Automaticky podle fotografie</option><option value="portrait">Na výšku</option><option value="landscape">Na šířku</option></select></label>
+      <button id="analyze" type="button">4. NAJÍT NEJOSTŘEJŠÍ POSTAVU</button>
+      <button id="saveAll" class="green" type="button" disabled>5. ULOŽIT VŠECHNY JPG</button>
+    </div>
+    <div class="destination"><strong>2. KAM ULOŽIT UPRAVENÉ ORIGINÁLY</strong><button id="setOriginalsFolder" type="button">VYBRAT CÍLOVOU SLOŽKU</button><span id="originalsFolderState">Cílová složka zatím není vybraná.</span></div>
+    <div class="destination" style="border-color:#93c5fd;background:#eff6ff"><strong>3. KAM ULOŽIT NÁHLEDY</strong><button id="setNasFolder" type="button">VYBRAT CÍLOVOU SLOŽKU</button><span id="nasFolderState" style="color:#1d4ed8">Cílová složka zatím není vybraná.</span></div>
+    <div class="destination"><label>Nahradit výchozí logo vodoznaku<input id="watermarkFile" type="file" accept="image/png,image/jpeg,image/webp"></label><span id="watermarkState">Načítá se přiložené logo…</span></div>
+    <div id="status" class="status">Vyberte zdrojovou složku, cílovou složku upravených originálů a cílovou složku náhledů.</div>
+    <p class="note"><b id="aiState">AI rozpoznání postav se načte při prvním zpracování.</b> Upravené A4 originály se uloží přímo do první zvolené složky. Náhledy 800 px s logem a názvem fotografie se uloží přímo do druhé zvolené složky. Ukládání nevytváří ZIP a nepoužívá BAT.</p>
+  </section>
+  <section class="workspace">
+    <aside class="panel files" id="fileList"><div class="empty">Zatím nebyly vybrány žádné fotografie.</div></aside>
+    <section class="panel stage">
+      <div id="emptyStage" class="empty">Po výběru fotografie se zde zobrazí navržený ořez.</div>
+      <div id="editor" hidden>
+        <div class="canvas-wrap"><canvas id="canvas"></canvas></div>
+        <p class="help"><span class="badge" id="methodBadge">Automatický ořez</span> Modrý rámeček můžete myší přetáhnout na správné místo.</p>
+        <div class="adjust">
+          <label>Přiblížení ořezu<input id="zoom" type="range" min="1" max="2.5" value="1" step="0.01"></label>
+          <label>Kvalita JPG: <span id="qualityValue">100 %</span><input id="quality" type="range" min="100" max="100" value="100" step="1" disabled></label>
+          <label><input id="enhanceColors" type="checkbox" checked disabled> Automatická úprava „Zkusím štěstí“ – barvy, jas a kontrast</label>
+          <label><input id="sharpen" type="checkbox" checked> Šetrně doostřit vybranou postavu</label>
+        </div>
+        <div id="resolutionWarning" class="warn"></div>
+        <div class="actions"><button id="resetCrop" type="button">Znovu automaticky navrhnout</button><button id="saveOne" class="green" type="button">ULOŽIT TUTO FOTOGRAFII</button></div>
+      </div>
+    </section>
+  </section>
+</main>
+<script src="crop.js?v=20260907-direct-folders"></script>
+</body>
+</html>
