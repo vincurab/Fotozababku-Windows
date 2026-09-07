@@ -1,0 +1,21 @@
+{
+  "name": "fotozababku-windows",
+  "version": "1.0.0",
+  "description": "Fotozababku – přímé ukládání fotografií do zvolených složek",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "38.1.0",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "cz.fotozababku.editor",
+    "productName": "Fotozababku",
+    "asar": true,
+    "files": ["main.js", "preload.js", "editor/**/*"],
+    "win": {"target": "portable", "artifactName": "Fotozababku.exe"}
+  }
+}
