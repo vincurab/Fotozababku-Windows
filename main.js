@@ -5,7 +5,7 @@ const path = require('path');
 function createWindow(){
   const win = new BrowserWindow({width:1500,height:950,minWidth:1050,minHeight:700,show:false,webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
   win.removeMenu();
-  win.loadFile(path.join(__dirname,'editor','index.html'));
+  win.loadFile(path.join(__dirname,'index.html'));
   win.once('ready-to-show',()=>win.show());
 }
 

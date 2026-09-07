@@ -1,6 +1,6 @@
 {
   "name": "fotozababku-windows",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fotozababku – přímé ukládání fotografií do zvolených složek",
   "main": "main.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "appId": "cz.fotozababku.editor",
     "productName": "Fotozababku",
     "asar": true,
-    "files": ["main.js", "preload.js", "editor/**/*"],
+    "files": ["main.js", "preload.js", "index.html", "crop.js"],
     "win": {"target": "portable", "artifactName": "Fotozababku.exe"}
   }
 }
